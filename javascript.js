@@ -9,3 +9,11 @@ function createPlayer(name) {
     return { giveWin, getWins, setBoardSymbol, getBoardSymbol, name };
 }
 
+const gameBoard = (function () {
+    let board = [];
+
+    return { board };
+})();
+
+
+
