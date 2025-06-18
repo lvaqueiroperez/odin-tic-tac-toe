@@ -27,7 +27,7 @@ const gameBoard = (function () {
             (board[6] === board[7] && board[6] === board[8])) {
 
             winner = player1.getBoardSymbol() === board[0] ? player1 : player2;
-            console.log("ROUND " + round + " WINNER IS: " + winner.name);
+            console.log("*****ROUND " + round + " WINNER IS: " + winner.name + "*****");
             winner.giveWin();
 
             // vertical        
@@ -36,7 +36,7 @@ const gameBoard = (function () {
             (board[2] === board[5] && board[2] === board[8])) {
 
             winner = player1.getBoardSymbol() === board[0] ? player1 : player2;
-            console.log("ROUND " + round + " WINNER IS: " + winner.name);
+            console.log("*****ROUND " + round + " WINNER IS: " + winner.name + "*****");
             winner.giveWin();
 
             // diagonal
@@ -44,11 +44,16 @@ const gameBoard = (function () {
             (board[2] === board[4] && board[2] === board[6])) {
 
             winner = player1.getBoardSymbol() === board[0] ? player1 : player2;
-            console.log("ROUND " + round + " WINNER IS: " + winner.name);
+            console.log("*****ROUND " + round + " WINNER IS: " + winner.name + "*****");
             winner.giveWin();
 
         } else {
             console.log("NO WINNER YET");
+        }
+
+        if (round === 9) {
+            console.log("*****IT'S A TIE!*****");
+            // reset board
         }
 
     }
