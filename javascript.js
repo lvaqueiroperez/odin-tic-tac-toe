@@ -58,11 +58,11 @@ const gameBoard = (function () {
 
 // recordar que en los objetos, al crear "copias" se almacena una referencia al objeto, no un objeto nuevo como copia!!!
 // son 9 rondas por juego o hasta que alguien gane
+// player 1 siempre empieza
 const gameFlowModule = (function (player1, player2, board) {
 
     let round = 1;
 
-    // player 1 siempre empieza
     player1.setBoardSymbol("O");
     player2.setBoardSymbol("X");
 
@@ -78,8 +78,8 @@ const gameFlowModule = (function (player1, player2, board) {
         console.log("NEW BOARD STATE\n");
         board.displayBoard();
 
+        // check board
         if (round >= 5) {
-            // check board
             board.checkWinner(player1, player2, round);
         }
 
