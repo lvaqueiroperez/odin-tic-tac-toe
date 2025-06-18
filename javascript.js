@@ -70,29 +70,35 @@ const gameFlowModule = (function (player1, player2, board) {
 
 
     const playRound = function (position) {
-        console.log("ACTIVE PLAYER: " + activePlayer.name);
-        console.log("BOARD STATE\n");
-        board.displayBoard();
 
-        board.board[position] = activePlayer.getBoardSymbol();
-        console.log("NEW BOARD STATE\n");
-        board.displayBoard();
+        // check if position isn't occupied
+        if (isNaN(board.board[position])) {
+            console.log("POSITION ALREADY OCCUPIED!");
+        } else {
 
-        // check board
-        if (round >= 5) {
-            board.checkWinner(player1, player2, round);
+            console.log("ACTIVE PLAYER: " + activePlayer.name);
+            console.log("BOARD STATE\n");
+            board.displayBoard();
+
+            board.board[position] = activePlayer.getBoardSymbol();
+            console.log("NEW BOARD STATE\n");
+            board.displayBoard();
+
+            // check board
+            if (round >= 5) {
+                board.checkWinner(player1, player2, round);
+            }
+
+            round++;
+
+            activePlayer = round % 2 === 0 ? player2 : player1;
+
+            console.log("NEW ACTIVE PLAYER: " + activePlayer.name);
+
         }
-
-        round++;
-
-        activePlayer = round % 2 === 0 ? player2 : player1;
-
-        console.log("NEW ACTIVE PLAYER: " + activePlayer.name);
-
     }
 
     return { playRound };
-
 
 })(
     createPlayer("Player1"),
