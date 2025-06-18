@@ -11,6 +11,11 @@ function createPlayer(name) {
 
 const gameBoard = (function () {
     // 9 posiciones fijas
+    /*
+    1 2 3
+    4 5 6
+    7 8 9
+    */
     let board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     const displayBoard = () => console.log(
