@@ -89,19 +89,47 @@ const gameFlowModule = (function (player1, player2, gameBoard) {
 
     let activePlayer = player1;
 
+    // hay que saber cuando resetear el juego, rondas y tablero
+    const playRound = function () {
 
-    const playRound = function (position) {
+        console.log("BOARD STATE\n");
+        gameBoard.displayBoard();
+
+        let position = "";
+
+        const regex = /^[1-9]$/;
+
+
+        do {
+            position = +prompt("SELECT A POSITION FROM 1 TO 9", "");
+
+            console.log(position);
+
+            // +null === 0
+            if (position === 0) {
+
+                alert("CANCELING...");
+                return;
+
+            } else {
+
+                if (!regex.test(position)) {
+                    alert("SELECT A VALID POSITION FROM 1 TO 9!");
+                }
+
+            }
+
+        } while (!regex.test(position));
+
 
         // check if position isn't occupied
-        if (isNaN(gameBoard.board[position])) {
-            console.log("POSITION ALREADY OCCUPIED!");
+        if (isNaN(gameBoard.board[position - 1]) && position !== 0) {
+            alert("POSITION ALREADY OCCUPIED! TRY AGAIN");
         } else {
 
             console.log("ACTIVE PLAYER: " + activePlayer.name);
-            console.log("BOARD STATE\n");
-            gameBoard.displayBoard();
 
-            gameBoard.board[position] = activePlayer.getBoardSymbol();
+            gameBoard.board[position - 1] = activePlayer.getBoardSymbol();
             console.log("NEW BOARD STATE\n");
             gameBoard.displayBoard();
 
@@ -117,6 +145,7 @@ const gameFlowModule = (function (player1, player2, gameBoard) {
             console.log("NEW ACTIVE PLAYER: " + activePlayer.name);
 
         }
+
     }
 
     return { playRound };
