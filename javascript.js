@@ -22,6 +22,8 @@ const gameBoard = (function () {
         `${board[0]}  ${board[1]}  ${board[2]}\n${board[3]}  ${board[4]}  ${board[5]}\n${board[6]}  ${board[7]}  ${board[8]}`
     );
 
+    const resetBoard = () => board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
     const checkWinner = function (player1, player2, round) {
 
         let winner = null;
@@ -35,7 +37,7 @@ const gameBoard = (function () {
             console.log("*****ROUND " + round + " WINNER IS: " + winner.name + "*****");
             winner.giveWin();
             // reset board
-            board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            resetBoard();
 
             // vertical        
         } else if ((board[0] === board[3] && board[0] === board[6]) ||
@@ -46,7 +48,7 @@ const gameBoard = (function () {
             console.log("*****ROUND " + round + " WINNER IS: " + winner.name + "*****");
             winner.giveWin();
             // reset board
-            board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            resetBoard();
 
             // diagonal
         } else if ((board[0] === board[4] && board[0] === board[8]) ||
@@ -56,14 +58,14 @@ const gameBoard = (function () {
             console.log("*****ROUND " + round + " WINNER IS: " + winner.name + "*****");
             winner.giveWin();
             // reset board
-            board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            resetBoard();
 
         } else {
 
             if (round === 9) {
                 console.log("*****IT'S A TIE!*****");
                 // reset board
-                board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                resetBoard();
             } else {
                 console.log("NO WINNER YET");
             }
@@ -72,7 +74,7 @@ const gameBoard = (function () {
 
     }
 
-    return { board, checkWinner, displayBoard };
+    return { board, checkWinner, displayBoard, resetBoard };
 })();
 
 // recordar que en los objetos, al crear "copias" se almacena una referencia al objeto, no un objeto nuevo como copia!!!
