@@ -59,14 +59,16 @@ const gameBoard = (function () {
             board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         } else {
-            console.log("NO WINNER YET");
+
+            if (round === 9) {
+                console.log("*****IT'S A TIE!*****");
+                // reset board
+                board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            } else {
+                console.log("NO WINNER YET");
+            }
         }
 
-        if (round === 9) {
-            console.log("*****IT'S A TIE!*****");
-            // reset board
-            board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-        }
 
     }
 
