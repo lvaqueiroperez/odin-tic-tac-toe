@@ -27,7 +27,7 @@ const gameBoard = (function () {
             (board[6] === board[7] && board[6] === board[8])) {
 
             winner = player1.getBoardSymbol() === board[0] ? player1 : player2;
-            console.log("ROUND " + round + "WINNER IS: " + winner.name);
+            console.log("ROUND " + round + " WINNER IS: " + winner.name);
             winner.giveWin();
 
             // vertical        
@@ -36,7 +36,7 @@ const gameBoard = (function () {
             (board[2] === board[5] && board[2] === board[8])) {
 
             winner = player1.getBoardSymbol() === board[0] ? player1 : player2;
-            console.log("ROUND " + round + "WINNER IS: " + winner.name);
+            console.log("ROUND " + round + " WINNER IS: " + winner.name);
             winner.giveWin();
 
             // diagonal
@@ -44,7 +44,7 @@ const gameBoard = (function () {
             (board[2] === board[4] && board[2] === board[6])) {
 
             winner = player1.getBoardSymbol() === board[0] ? player1 : player2;
-            console.log("ROUND " + round + "WINNER IS: " + winner.name);
+            console.log("ROUND " + round + " WINNER IS: " + winner.name);
             winner.giveWin();
 
         } else {
@@ -71,19 +71,24 @@ const gameFlowModule = (function (player1, player2, board) {
 
     const playRound = function (position) {
         console.log("ACTIVE PLAYER: " + activePlayer.name);
-        console.log("BOARD STATE\n" + board.displayBoard());
+        console.log("BOARD STATE\n");
+        board.displayBoard();
 
         board.board[position] = activePlayer.getBoardSymbol();
-        console.log("NEW BOARD STATE\n" + board.displayBoard());
-        round++;
-        activePlayer = round % 2 === 0 ? player2 : player1;
-
-        console.log("ACTIVE PLAYER: " + activePlayer.name);
+        console.log("NEW BOARD STATE\n");
+        board.displayBoard();
 
         if (round >= 5) {
             // check board
             board.checkWinner(player1, player2, round);
         }
+
+        round++;
+
+        activePlayer = round % 2 === 0 ? player2 : player1;
+
+        console.log("NEW ACTIVE PLAYER: " + activePlayer.name);
+
     }
 
     return { playRound };
