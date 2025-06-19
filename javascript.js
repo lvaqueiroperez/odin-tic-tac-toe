@@ -9,7 +9,7 @@ function createPlayerFactory(name) {
     return { giveWin, getWins, setBoardSymbol, getBoardSymbol, name };
 }
 
-const gameBoard = (function () {
+const gameBoardModule = (function () {
     /*
     1 2 3
     4 5 6
@@ -32,7 +32,7 @@ const gameBoard = (function () {
 
 // stored objects are references, not copies!
 // player 1 always starts
-const gameFlowModule = (function (gameBoard) {
+const gameFlowModule = (function (gameBoardModule) {
 
     let player1 = null;
     let player2 = null;
@@ -88,7 +88,7 @@ const gameFlowModule = (function (gameBoard) {
         console.log("*****ACTIVE PLAYER: " + activePlayer.name + "*****");
 
         console.log("BOARD STATE\n");
-        gameBoard.displayBoard();
+        gameBoardModule.displayBoard();
 
         let position = "";
 
@@ -120,20 +120,20 @@ const gameFlowModule = (function (gameBoard) {
             // array-compatible position
             position = position - 1;
 
-            if (isNaN(gameBoard.board[position])) {
+            if (isNaN(gameBoardModule.board[position])) {
 
                 alert("POSITION ALREADY OCCUPIED! TRY AGAIN");
                 return "occupiedPosition";
 
             } else {
 
-                gameBoard.board[position] = activePlayer.getBoardSymbol();
+                gameBoardModule.board[position] = activePlayer.getBoardSymbol();
                 console.log("NEW BOARD STATE\n");
-                gameBoard.displayBoard();
+                gameBoardModule.displayBoard();
 
                 // there can't be winners until round 5, faster runtime and save memory
                 if (round >= 5) {
-                    winner = checkWinner(player1, player2, round, gameBoard.board);
+                    winner = checkWinner(player1, player2, round, gameBoardModule.board);
 
                     switch (winner) {
 
@@ -214,4 +214,4 @@ const gameFlowModule = (function (gameBoard) {
 
     return { startGame };
 
-})(gameBoard);
+})(gameBoardModule);
