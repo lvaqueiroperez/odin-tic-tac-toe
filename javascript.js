@@ -1,4 +1,4 @@
-function createPlayer(name) {
+function createPlayerFactory(name) {
     let gamesWon = 0;
     const giveWin = () => gamesWon++;
     const getWins = () => gamesWon;
@@ -52,8 +52,8 @@ const gameFlowModule = (function (gameBoard) {
 
         resetGame();
 
-        player1 = createPlayer(prompt("Please, introduce Player 1 name: ", ""));
-        player2 = createPlayer(prompt("Please, introduce Player 2 name: ", ""));
+        player1 = createPlayerFactory(prompt("Please, introduce Player 1 name: ", ""));
+        player2 = createPlayerFactory(prompt("Please, introduce Player 2 name: ", ""));
 
         activePlayer = player1;
         player1.setBoardSymbol("O");
