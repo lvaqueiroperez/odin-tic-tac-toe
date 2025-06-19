@@ -10,7 +10,6 @@ function createPlayer(name) {
 }
 
 const gameBoard = (function () {
-    // 9 posiciones fijas
     /*
     1 2 3
     4 5 6
@@ -18,140 +17,201 @@ const gameBoard = (function () {
     */
     let board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    const displayBoard = () => console.log(
-        `${board[0]}  ${board[1]}  ${board[2]}\n${board[3]}  ${board[4]}  ${board[5]}\n${board[6]}  ${board[7]}  ${board[8]}`
-    );
-
-    const resetBoard = () => board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-    const checkWinner = function (player1, player2, round) {
-
-        let winner = null;
-
-        // horizontal
-        if ((board[0] === board[1] && board[0] === board[2]) ||
-            (board[3] === board[4] && board[3] === board[5]) ||
-            (board[6] === board[7] && board[6] === board[8])) {
-
-            winner = player1.getBoardSymbol() === board[0] ? player1 : player2;
-            console.log("*****ROUND " + round + " WINNER IS: " + winner.name + "*****");
-            winner.giveWin();
-            // reset board
-            resetBoard();
-
-            // vertical        
-        } else if ((board[0] === board[3] && board[0] === board[6]) ||
-            (board[1] === board[4] && board[1] === board[7]) ||
-            (board[2] === board[5] && board[2] === board[8])) {
-
-            winner = player1.getBoardSymbol() === board[0] ? player1 : player2;
-            console.log("*****ROUND " + round + " WINNER IS: " + winner.name + "*****");
-            winner.giveWin();
-            // reset board
-            resetBoard();
-
-            // diagonal
-        } else if ((board[0] === board[4] && board[0] === board[8]) ||
-            (board[2] === board[4] && board[2] === board[6])) {
-
-            winner = player1.getBoardSymbol() === board[0] ? player1 : player2;
-            console.log("*****ROUND " + round + " WINNER IS: " + winner.name + "*****");
-            winner.giveWin();
-            // reset board
-            resetBoard();
-
-        } else {
-
-            if (round === 9) {
-                console.log("*****IT'S A TIE!*****");
-                // reset board
-                resetBoard();
-            } else {
-                console.log("NO WINNER YET");
-            }
-        }
-
-
+    const displayBoard = function () {
+        console.log(
+            `${board[0]}  ${board[1]}  ${board[2]}\n${board[3]}  ${board[4]}  ${board[5]}\n${board[6]}  ${board[7]}  ${board[8]}`
+        );
     }
 
-    return { board, checkWinner, displayBoard, resetBoard };
+    const resetBoard = function () {
+        board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    };
+
+    return { board, displayBoard, resetBoard };
 })();
 
-// recordar que en los objetos, al crear "copias" se almacena una referencia al objeto, no un objeto nuevo como copia!!!
-// son 9 rondas por juego o hasta que alguien gane
-// player 1 siempre empieza
-const gameFlowModule = (function (player1, player2, gameBoard) {
+// stored objects are references, not copies!
+// player 1 always starts
+const gameFlowModule = (function (gameBoard) {
+
+    let player1 = null;
+    let player2 = null;
 
     let round = 1;
 
-    player1.setBoardSymbol("O");
-    player2.setBoardSymbol("X");
+    let activePlayer = null;
 
-    let activePlayer = player1;
+    const resetGame = () => {
+        round = 1;
+        activePlayer = null;
+        player1 = null;
+        player2 = null;
+    }
 
-    // hay que saber cuando resetear el juego, rondas y tablero
+    const startGame = function () {
+
+        resetGame();
+
+        player1 = createPlayer(prompt("Please, introduce Player 1 name: ", ""));
+        player2 = createPlayer(prompt("Please, introduce Player 2 name: ", ""));
+
+        activePlayer = player1;
+        player1.setBoardSymbol("O");
+        player2.setBoardSymbol("X");
+
+        // typeof null === "object"!
+        let result = "";
+
+        do {
+
+            result = playRound();
+
+        } while ((result !== "cancelGame") && (result !== "tie") && (typeof result !== "object"));
+
+        switch (result) {
+            case "tie":
+                alert("IT'S A TIE!");
+                break;
+            case "cancelGame":
+                alert("CANCELING GAME...");
+                break;
+            default:
+                alert("THE WINNER IS:\n" + result.name);
+                break;
+        }
+
+    };
+
     const playRound = function () {
+
+        console.log("*****ROUND " + round + "*****");
+        console.log("*****ACTIVE PLAYER: " + activePlayer.name + "*****");
 
         console.log("BOARD STATE\n");
         gameBoard.displayBoard();
 
         let position = "";
 
+        // numbers between 1-9
         const regex = /^[1-9]$/;
 
-
         do {
-            position = +prompt("SELECT A POSITION FROM 1 TO 9", "");
+            position = prompt("SELECT A POSITION FROM 1 TO 9", "");
 
-            console.log(position);
-
-            // +null === 0
-            if (position === 0) {
-
-                alert("CANCELING...");
-                return;
-
+            if (position === null) {
+                // exit loop with break
+                break;
             } else {
+                position = +position;
+            }
 
-                if (!regex.test(position)) {
-                    alert("SELECT A VALID POSITION FROM 1 TO 9!");
-                }
-
+            if (!regex.test(position)) {
+                alert("SELECT A VALID POSITION FROM 1 TO 9!");
             }
 
         } while (!regex.test(position));
 
+        if (position === null) {
 
-        // check if position isn't occupied
-        if (isNaN(gameBoard.board[position - 1]) && position !== 0) {
-            alert("POSITION ALREADY OCCUPIED! TRY AGAIN");
+            return "cancelGame";
+
         } else {
 
-            console.log("ACTIVE PLAYER: " + activePlayer.name);
+            // array-compatible position
+            position = position - 1;
 
-            gameBoard.board[position - 1] = activePlayer.getBoardSymbol();
-            console.log("NEW BOARD STATE\n");
-            gameBoard.displayBoard();
+            if (isNaN(gameBoard.board[position])) {
 
-            // check board
-            if (round >= 5) {
-                gameBoard.checkWinner(player1, player2, round);
+                alert("POSITION ALREADY OCCUPIED! TRY AGAIN");
+                return "occupiedPosition";
+
+            } else {
+
+                gameBoard.board[position] = activePlayer.getBoardSymbol();
+                console.log("NEW BOARD STATE\n");
+                gameBoard.displayBoard();
+
+                // there can't be winners until round 5, faster runtime and save memory
+                if (round >= 5) {
+                    winner = checkWinner(player1, player2, round, gameBoard.board);
+
+                    switch (winner) {
+
+                        case "tie":
+                            return "tie";
+
+                        case "continue":
+                            console.log("NEXT");
+                            round++;
+                            activePlayer = round % 2 === 0 ? player2 : player1;
+                            return "continue";
+
+                        default:
+                            return winner;
+
+                    }
+
+                } else {
+                    console.log("NEXT");
+                    round++;
+                    activePlayer = round % 2 === 0 ? player2 : player1;
+                    return "continue";
+                }
+
             }
-
-            round++;
-
-            activePlayer = round % 2 === 0 ? player2 : player1;
-
-            console.log("NEW ACTIVE PLAYER: " + activePlayer.name);
 
         }
 
     }
 
-    return { playRound };
+    function checkWinner(player1, player2, round, board) {
 
-})(
-    createPlayer("Player1"),
-    createPlayer("Player2"),
-    gameBoard
-);
+        if ((board[0] === board[1] && board[0] === board[2])) {
+
+            return board[0] === "O" ? player1 : player2;
+
+
+        } else if ((board[3] === board[4] && board[3] === board[5])) {
+
+            return board[0] === "O" ? player1 : player2;
+
+        } else if ((board[6] === board[7] && board[6] === board[8])) {
+
+            return board[0] === "O" ? player1 : player2;
+
+        } else if ((board[0] === board[3] && board[0] === board[6])) {
+
+            return board[0] === "O" ? player1 : player2;
+
+        } else if ((board[1] === board[4] && board[1] === board[7])) {
+
+            return board[0] === "O" ? player1 : player2;
+
+        } else if ((board[2] === board[5] && board[2] === board[8])) {
+
+            return board[0] === "O" ? player1 : player2;
+
+        } else if ((board[0] === board[4] && board[0] === board[8])) {
+
+            return board[0] === "O" ? player1 : player2;
+
+        } else if ((board[2] === board[4] && board[2] === board[6])) {
+
+            return board[0] === "O" ? player1 : player2;
+
+        } else {
+
+            if (round === 9) {
+
+                return "tie";
+
+            } else {
+                return "continue"
+            }
+        }
+
+    }
+
+    return { startGame };
+
+})(gameBoard);
