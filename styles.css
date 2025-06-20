@@ -99,4 +99,7 @@ h6 {
 
 .gameBoardContainer>div {
     border: 5px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
