@@ -55,6 +55,12 @@ const gameFlowModule = (function (gameBoardModule) {
         player2 = null;
     }
 
+    const nextRound = () => {
+        console.log("NEXT");
+        round++;
+        activePlayer = round % 2 === 0 ? player2 : player1;
+    }
+
     const startGame = function () {
 
         gameBoardModule.resetBoard();
@@ -142,9 +148,7 @@ const gameFlowModule = (function (gameBoardModule) {
                         return "tie";
 
                     case "continue":
-                        console.log("NEXT");
-                        round++;
-                        activePlayer = round % 2 === 0 ? player2 : player1;
+                        nextRound();
                         return "continue";
 
                     default:
@@ -153,9 +157,7 @@ const gameFlowModule = (function (gameBoardModule) {
                 }
 
             } else {
-                console.log("NEXT");
-                round++;
-                activePlayer = round % 2 === 0 ? player2 : player1;
+                nextRound();
                 return "continue";
             }
 
