@@ -217,6 +217,7 @@ const gameFlowModule = (function (gameBoardModule) {
 
 })(gameBoardModule);
 
+// depender también del gameFlow?
 const domLogicAndDisplayModule = (function (gameBoardModule) {
 
     const gameBoardContainer = document.querySelector(".gameBoardContainer");
