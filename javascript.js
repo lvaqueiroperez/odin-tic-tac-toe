@@ -165,7 +165,6 @@ const gameFlowModule = (function (gameBoardModule) {
 
     }
     // pendiente: algoritmo que compruebe todo sin necesidad de if/elses...
-    // con array.reduce()....
     function checkWinner(player1, player2, round, board) {
 
         if ((board[0] === board[1] && board[0] === board[2])) {
