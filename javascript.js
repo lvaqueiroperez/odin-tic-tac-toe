@@ -216,3 +216,17 @@ const gameFlowModule = (function (gameBoardModule) {
     return { startGame };
 
 })(gameBoardModule);
+
+const domLogicAndDisplayModule = (function (gameBoardModule) {
+
+    const gameBoardContainer = document.querySelector(".gameBoardContainer");
+    const squaresArray = Array.from(document.querySelectorAll(".gameBoardContainer>div"));
+
+    // al ser una IIFE, la función ya pondrá al principio el contenido del board inicial
+    // sin que tengamos que hacer nada
+    for (let i = 0; i < gameBoardModule.board.length; i++) {
+        squaresArray[i].textContent = gameBoardModule.board[i];
+    }
+
+
+})(gameBoardModule);
