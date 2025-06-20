@@ -32,6 +32,10 @@ body {
     line-height: 1.5;
     /* 5. Improve text rendering */
     -webkit-font-smoothing: antialiased;
+
+    /*center body elements*/
+    margin: auto;
+
 }
 
 /* 6. Improve media defaults */
@@ -86,3 +90,13 @@ h6 {
 }
 
 /*************MAIN CSS*****************/
+.gameBoardContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 250px);
+    grid-template-rows: repeat(3, 250px);
+    gap: 30px;
+}
+
+.gameBoardContainer>div {
+    border: 5px solid black;
+}
