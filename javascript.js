@@ -170,11 +170,11 @@ const gameFlowModule = (function (gameBoardModule) {
 
         } else if ((board[3] === board[4] && board[3] === board[5])) {
 
-            return board[0] === "O" ? player1 : player2;
+            return board[3] === "O" ? player1 : player2;
 
         } else if ((board[6] === board[7] && board[6] === board[8])) {
 
-            return board[0] === "O" ? player1 : player2;
+            return board[6] === "O" ? player1 : player2;
 
         } else if ((board[0] === board[3] && board[0] === board[6])) {
 
@@ -182,11 +182,11 @@ const gameFlowModule = (function (gameBoardModule) {
 
         } else if ((board[1] === board[4] && board[1] === board[7])) {
 
-            return board[0] === "O" ? player1 : player2;
+            return board[1] === "O" ? player1 : player2;
 
         } else if ((board[2] === board[5] && board[2] === board[8])) {
 
-            return board[0] === "O" ? player1 : player2;
+            return board[2] === "O" ? player1 : player2;
 
         } else if ((board[0] === board[4] && board[0] === board[8])) {
 
@@ -194,7 +194,7 @@ const gameFlowModule = (function (gameBoardModule) {
 
         } else if ((board[2] === board[4] && board[2] === board[6])) {
 
-            return board[0] === "O" ? player1 : player2;
+            return board[2] === "O" ? player1 : player2;
 
         } else {
 
