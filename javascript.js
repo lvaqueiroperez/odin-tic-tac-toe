@@ -120,6 +120,7 @@ const gameFlowModule = (function (gameBoardModule) {
         // array-compatible position
         position = position - 1;
 
+        // comprobar que la posición no esté ocupada
         if (isNaN(gameBoardModule.board[position])) {
 
             alert("POSITION ALREADY OCCUPIED! TRY AGAIN");
