@@ -7,12 +7,13 @@ function createPlayerFactory(name) {
     return { setBoardSymbol, getBoardSymbol, name };
 }
 
+/*
+1 2 3
+4 5 6
+7 8 9
+*/
 const gameBoardModule = (function () {
-    /*
-    1 2 3
-    4 5 6
-    7 8 9
-    */
+
     let board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     const displayBoard = function () {
@@ -90,14 +91,12 @@ const gameFlowModule = (function (gameBoardModule) {
 
         let position = "";
 
-        // numbers between 1-9
         const regex = /^[1-9]$/;
 
         do {
             position = prompt("SELECT A POSITION FROM 1 TO 9", "");
 
             if (position === null) {
-                // exit loop with break
                 break;
             } else {
                 position = +position;
