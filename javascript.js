@@ -106,7 +106,7 @@ const gameFlowModule = (function (gameBoardModule) {
             position = prompt("SELECT A POSITION FROM 1 TO 9", "");
 
             if (position === null) {
-                break;
+                return "cancelGame";
             } else {
                 position = +position;
             }
@@ -117,53 +117,45 @@ const gameFlowModule = (function (gameBoardModule) {
 
         } while (!regex.test(position));
 
-        if (position === null) {
+        // array-compatible position
+        position = position - 1;
 
-            return "cancelGame";
+        if (isNaN(gameBoardModule.board[position])) {
+
+            alert("POSITION ALREADY OCCUPIED! TRY AGAIN");
+            return "occupiedPosition";
 
         } else {
 
-            // array-compatible position
-            position = position - 1;
+            gameBoardModule.board[position] = activePlayer.getBoardSymbol();
+            console.log("NEW BOARD STATE\n");
+            gameBoardModule.displayBoard();
 
-            if (isNaN(gameBoardModule.board[position])) {
+            // there can't be winners until round 5, faster runtime and save memory
+            if (round >= 5) {
+                winner = checkWinner(player1, player2, round, gameBoardModule.board);
 
-                alert("POSITION ALREADY OCCUPIED! TRY AGAIN");
-                return "occupiedPosition";
+                switch (winner) {
 
-            } else {
+                    case "tie":
+                        return "tie";
 
-                gameBoardModule.board[position] = activePlayer.getBoardSymbol();
-                console.log("NEW BOARD STATE\n");
-                gameBoardModule.displayBoard();
+                    case "continue":
+                        console.log("NEXT");
+                        round++;
+                        activePlayer = round % 2 === 0 ? player2 : player1;
+                        return "continue";
 
-                // there can't be winners until round 5, faster runtime and save memory
-                if (round >= 5) {
-                    winner = checkWinner(player1, player2, round, gameBoardModule.board);
+                    default:
+                        return winner;
 
-                    switch (winner) {
-
-                        case "tie":
-                            return "tie";
-
-                        case "continue":
-                            console.log("NEXT");
-                            round++;
-                            activePlayer = round % 2 === 0 ? player2 : player1;
-                            return "continue";
-
-                        default:
-                            return winner;
-
-                    }
-
-                } else {
-                    console.log("NEXT");
-                    round++;
-                    activePlayer = round % 2 === 0 ? player2 : player1;
-                    return "continue";
                 }
 
+            } else {
+                console.log("NEXT");
+                round++;
+                activePlayer = round % 2 === 0 ? player2 : player1;
+                return "continue";
             }
 
         }
