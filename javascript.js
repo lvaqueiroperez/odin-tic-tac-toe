@@ -45,9 +45,7 @@ const gameFlowModule = (function (gameBoardModule) {
 
     let player1 = null;
     let player2 = null;
-
     let round = 1;
-
     let activePlayer = null;
 
     const resetGame = () => {
