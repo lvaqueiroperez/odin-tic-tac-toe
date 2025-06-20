@@ -26,8 +26,14 @@ const gameBoardModule = (function () {
         );
     }
 
+    // Los arrays son tratados como objetos especiales, pero siguen siendo objetos!!!
+    // No podemos cambiarles un valor así como así, tenemos que acceder a sus índices!
     const resetBoard = function () {
-        board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        let counter = 1;
+        board.forEach((item, index, array) => {
+            array[index] = counter;
+            counter++;
+        })
     };
 
     return { board, displayBoard, resetBoard };
@@ -53,6 +59,7 @@ const gameFlowModule = (function (gameBoardModule) {
 
     const startGame = function () {
 
+        gameBoardModule.resetBoard();
         resetGame();
 
         player1 = createPlayerFactory(prompt("Please, introduce Player 1 name: ", ""));
