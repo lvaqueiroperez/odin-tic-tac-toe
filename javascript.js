@@ -132,7 +132,7 @@ const gameFlowModule = (function (gameBoardModule) {
             console.log("NEW BOARD STATE\n");
             gameBoardModule.displayBoard();
 
-            // there can't be winners until round 5, faster runtime and save memory
+            // there can't be winners until round 5, faster runtime and memory save
             if (round >= 5) {
                 winner = checkWinner(player1, player2, round, gameBoardModule.board);
 
