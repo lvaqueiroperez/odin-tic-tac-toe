@@ -66,8 +66,10 @@ const gameFlowModule = (function (gameBoardModule) {
         gameBoardModule.resetBoard();
         resetGame();
 
-        player1 = createPlayerFactory(prompt("Please, introduce Player 1 name: ", ""));
-        player2 = createPlayerFactory(prompt("Please, introduce Player 2 name: ", ""));
+        player1 = createPlayerFactory(document.querySelector("#player1Name").value);
+        player2 = createPlayerFactory(document.querySelector("#player2Name").value);
+
+        console.log(player1);
 
         activePlayer = player1;
         player1.setBoardSymbol("O");
