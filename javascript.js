@@ -224,12 +224,24 @@ const domLogicAndDisplayModule = (function (gameBoardModule) {
 
     const gameBoardContainer = document.querySelector(".gameBoardContainer");
     const squaresArray = Array.from(document.querySelectorAll(".gameBoardContainer>div"));
+    const startGameBtn = document.querySelector("form button");
 
     // al ser una IIFE, la función ya pondrá al principio el contenido del board inicial
     // sin que tengamos que hacer nada
     for (let i = 0; i < gameBoardModule.board.length; i++) {
         squaresArray[i].textContent = gameBoardModule.board[i];
     }
+
+    startGameBtn.addEventListener("click", (e) => {
+
+        const player1Name = document.querySelector("#player1Name");
+        const player2Name = document.querySelector("#player2Name");
+
+        if (player1Name && player2Name) {
+            // game start con los nombres como parámetros
+        }
+
+    });
 
 
 })(gameBoardModule);
