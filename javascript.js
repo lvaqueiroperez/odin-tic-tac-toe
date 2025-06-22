@@ -225,6 +225,7 @@ const domLogicAndDisplayModule = (function (gameBoardModule) {
     const gameBoardContainer = document.querySelector(".gameBoardContainer");
     const squaresArray = Array.from(document.querySelectorAll(".gameBoardContainer>div"));
     const startGameBtn = document.querySelector("form button");
+    const gameBoardDialog = document.querySelector("dialog");
 
     // al ser una IIFE, la función ya pondrá al principio el contenido del board inicial
     // sin que tengamos que hacer nada
@@ -234,11 +235,16 @@ const domLogicAndDisplayModule = (function (gameBoardModule) {
 
     startGameBtn.addEventListener("click", (e) => {
 
-        const player1Name = document.querySelector("#player1Name");
-        const player2Name = document.querySelector("#player2Name");
+        const player1Name = document.querySelector("#player1Name").value;
+        const player2Name = document.querySelector("#player2Name").value;
 
-        if (player1Name && player2Name) {
+        if ((player1Name !== "") && (player2Name !== "")) {
+
+            gameBoardDialog.showModal();
             // game start con los nombres como parámetros
+
+        } else {
+            alert("Please, enter a name for both players!");
         }
 
     });
