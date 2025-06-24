@@ -86,7 +86,6 @@ const gameFlowModule = (function (gameBoardModule) {
         let result = "";
 
         cancelButton.addEventListener("click", (e) => {
-            alert("CANCELING GAME...");
             startGameBtn.style["display"] = "block";
             cancelButton.style["display"] = "none";
             gameBoardContainer.querySelectorAll("div").forEach((square) => { square.style["border-color"] = "black" });
@@ -111,6 +110,7 @@ const gameFlowModule = (function (gameBoardModule) {
                 switch (result) {
                     case "tie":
                         alert("IT'S A TIE! END OF THE GAME");
+                        controller.abort();
                         break;
                     case "cancelGame":
                         break;
