@@ -86,19 +86,20 @@ const gameFlowModule = (function (gameBoardModule) {
         let result = "";
 
         cancelButton.addEventListener("click", (e) => {
-            alert("CANCELING...");
+            alert("CANCELING GAME...");
             startGameBtn.style["display"] = "block";
             cancelButton.style["display"] = "none";
             gameBoardContainer.querySelectorAll("div").forEach((square) => { square.style["border-color"] = "black" });
             resetGame(gameInfo);
             gameBoardModule.resetBoard();
-            // PENDIENTE: QUITAR ESTE EVENT LISTENER, ANTES REVISAR TODO EL CÓDIGO QUE ESTÉ ORDENADO, VITAL HACER NOTAS Y ESQUEMA
-            // REBUSCAR CON LA FUNCIÓN "BIND"
-            // gameBoardContainer.removeEventListener("click");
+
+            controller.abort();
         });
 
         gameInfo.textContent = activePlayer.name + "'s TURN";
         gameInfo.style["color"] = activePlayer.getColor();
+
+        const controller = new AbortController();
 
         gameBoardContainer.addEventListener("click", (e) => {
 
@@ -112,7 +113,6 @@ const gameFlowModule = (function (gameBoardModule) {
                         alert("IT'S A TIE! END OF THE GAME");
                         break;
                     case "cancelGame":
-                        alert("CANCELING GAME...");
                         break;
                     case "occupiedPosition":
                         alert(activePlayer.name + "TRY AGAIN");
@@ -121,36 +121,14 @@ const gameFlowModule = (function (gameBoardModule) {
                         break;
                     default:
                         alert("THE WINNER IS:\n" + result.name + "\nEND OF THE GAME");
+                        controller.abort();
                         break;
                 }
 
             }
 
-        });
+        }, { signal: controller.signal });
 
-        /*
-        do {
-
-            gameInfo.textContent = activePlayer.name + " TURN!"
-
-            // en vez de este dowhile y la función "playRound", 
-            // poner un event listener que se encargue de todo, reciclar funcionalidades ya hechas
-            result = playRound();
-
-        } while ((result !== "cancelGame") && (result !== "tie") && (typeof result !== "object"));
-
-        switch (result) {
-            case "tie":
-                alert("IT'S A TIE!");
-                break;
-            case "cancelGame":
-                alert("CANCELING GAME...");
-                break;
-            default:
-                alert("THE WINNER IS:\n" + result.name);
-                break;
-        }
-*/
     };
 
 
