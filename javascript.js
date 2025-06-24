@@ -52,23 +52,26 @@ const gameFlowModule = (function (gameBoardModule) {
     let round = 1;
     let activePlayer = null;
 
-    const resetGame = () => {
+    const resetGame = (gameInfo) => {
         round = 1;
         activePlayer = null;
         player1 = null;
         player2 = null;
+        gameInfo.textContent = "";
     }
 
-    const nextRound = () => {
+    const nextRound = (gameInfo) => {
         console.log("NEXT");
         round++;
         activePlayer = round % 2 === 0 ? player2 : player1;
+        gameInfo.textContent = activePlayer.name + "'s TURN";
+        gameInfo.style["color"] = activePlayer.getColor();
     }
 
     const startGame = function (player1Name, player2Name, gameBoardContainer, cancelButton, startGameBtn, gameInfo) {
 
         gameBoardModule.resetBoard();
-        resetGame();
+        resetGame(gameInfo);
 
         player1 = createPlayerFactory(player1Name);
         player2 = createPlayerFactory(player2Name);
@@ -87,19 +90,22 @@ const gameFlowModule = (function (gameBoardModule) {
             startGameBtn.style["display"] = "block";
             cancelButton.style["display"] = "none";
             gameBoardContainer.querySelectorAll("div").forEach((square) => { square.style["border-color"] = "black" });
-            resetGame();
+            resetGame(gameInfo);
             gameBoardModule.resetBoard();
             // PENDIENTE: QUITAR ESTE EVENT LISTENER, ANTES REVISAR TODO EL CÓDIGO QUE ESTÉ ORDENADO, VITAL HACER NOTAS Y ESQUEMA
             // REBUSCAR CON LA FUNCIÓN "BIND"
             // gameBoardContainer.removeEventListener("click");
         });
 
+        gameInfo.textContent = activePlayer.name + "'s TURN";
+        gameInfo.style["color"] = activePlayer.getColor();
+
         gameBoardContainer.addEventListener("click", (e) => {
 
             if ((e.target.className.at(0) === "s")) {
                 console.log("square: " + e.target.className);
 
-                result = playRound(+e.target.className.slice(-1), gameBoardContainer);
+                result = playRound(+e.target.className.slice(-1), gameBoardContainer, gameInfo);
 
                 switch (result) {
                     case "tie":
@@ -112,7 +118,6 @@ const gameFlowModule = (function (gameBoardModule) {
                         alert(activePlayer.name + "TRY AGAIN");
                         break;
                     case "continue":
-                        alert(activePlayer.name + "TURN");
                         break;
                     default:
                         alert("THE WINNER IS:\n" + result.name + "\nEND OF THE GAME");
@@ -149,13 +154,7 @@ const gameFlowModule = (function (gameBoardModule) {
     };
 
 
-    const playRound = function (position, gameBoardContainer) {
-
-        console.log("*****ROUND " + round + "*****");
-        console.log("*****ACTIVE PLAYER: " + activePlayer.name + "*****");
-
-        console.log("BOARD STATE\n");
-        gameBoardModule.displayBoard();
+    const playRound = function (position, gameBoardContainer, gameInfo) {
 
         // array-compatible position
         console.log(position);
@@ -185,7 +184,7 @@ const gameFlowModule = (function (gameBoardModule) {
                         return "tie";
 
                     case "continue":
-                        nextRound();
+                        nextRound(gameInfo);
                         return "continue";
 
                     default:
@@ -194,7 +193,7 @@ const gameFlowModule = (function (gameBoardModule) {
                 }
 
             } else {
-                nextRound();
+                nextRound(gameInfo);
                 return "continue";
             }
 
