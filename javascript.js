@@ -1,10 +1,14 @@
 function createPlayerFactory(name) {
 
+    let color = "";
     let boardSymbol = "";
     const setBoardSymbol = (symbol) => boardSymbol = symbol;
     const getBoardSymbol = () => boardSymbol;
+    const setColor = (newColor) => color = newColor;
+    const getColor = () => color;
 
-    return { setBoardSymbol, getBoardSymbol, name };
+
+    return { setBoardSymbol, getBoardSymbol, name, setColor, getColor };
 }
 
 /*
@@ -61,25 +65,71 @@ const gameFlowModule = (function (gameBoardModule) {
         activePlayer = round % 2 === 0 ? player2 : player1;
     }
 
-    const startGame = function () {
+    const startGame = function (player1Name, player2Name, gameBoardContainer, cancelButton, startGameBtn, gameInfo) {
 
         gameBoardModule.resetBoard();
         resetGame();
 
-        player1 = createPlayerFactory(document.querySelector("#player1Name").value);
-        player2 = createPlayerFactory(document.querySelector("#player2Name").value);
-
-        console.log(player1);
+        player1 = createPlayerFactory(player1Name);
+        player2 = createPlayerFactory(player2Name);
 
         activePlayer = player1;
         player1.setBoardSymbol("O");
         player2.setBoardSymbol("X");
+        player1.setColor("green");
+        player2.setColor("blue");
 
         // typeof null === "object"!
         let result = "";
 
+        cancelButton.addEventListener("click", (e) => {
+            alert("CANCELING...");
+            startGameBtn.style["display"] = "block";
+            cancelButton.style["display"] = "none";
+            gameBoardContainer.querySelectorAll("div").forEach((square) => { square.style["border-color"] = "black" });
+            resetGame();
+            gameBoardModule.resetBoard();
+            // PENDIENTE: QUITAR ESTE EVENT LISTENER, ANTES REVISAR TODO EL CÓDIGO QUE ESTÉ ORDENADO, VITAL HACER NOTAS Y ESQUEMA
+            // REBUSCAR CON LA FUNCIÓN "BIND"
+            // gameBoardContainer.removeEventListener("click");
+        });
+
+        gameBoardContainer.addEventListener("click", (e) => {
+
+            if ((e.target.className.at(0) === "s")) {
+                console.log("square: " + e.target.className);
+
+                result = playRound(+e.target.className.slice(-1), gameBoardContainer);
+
+                switch (result) {
+                    case "tie":
+                        alert("IT'S A TIE! END OF THE GAME");
+                        break;
+                    case "cancelGame":
+                        alert("CANCELING GAME...");
+                        break;
+                    case "occupiedPosition":
+                        alert(activePlayer.name + "TRY AGAIN");
+                        break;
+                    case "continue":
+                        alert(activePlayer.name + "TURN");
+                        break;
+                    default:
+                        alert("THE WINNER IS:\n" + result.name + "\nEND OF THE GAME");
+                        break;
+                }
+
+            }
+
+        });
+
+        /*
         do {
 
+            gameInfo.textContent = activePlayer.name + " TURN!"
+
+            // en vez de este dowhile y la función "playRound", 
+            // poner un event listener que se encargue de todo, reciclar funcionalidades ya hechas
             result = playRound();
 
         } while ((result !== "cancelGame") && (result !== "tie") && (typeof result !== "object"));
@@ -95,10 +145,11 @@ const gameFlowModule = (function (gameBoardModule) {
                 alert("THE WINNER IS:\n" + result.name);
                 break;
         }
-
+*/
     };
 
-    const playRound = function () {
+
+    const playRound = function (position, gameBoardContainer) {
 
         console.log("*****ROUND " + round + "*****");
         console.log("*****ACTIVE PLAYER: " + activePlayer.name + "*****");
@@ -106,27 +157,8 @@ const gameFlowModule = (function (gameBoardModule) {
         console.log("BOARD STATE\n");
         gameBoardModule.displayBoard();
 
-        let position = "";
-
-        const regex = /^[1-9]$/;
-
-        do {
-            position = prompt("SELECT A POSITION FROM 1 TO 9", "");
-
-            if (position === null) {
-                return "cancelGame";
-            } else {
-                position = +position;
-            }
-
-            if (!regex.test(position)) {
-                alert("SELECT A VALID POSITION FROM 1 TO 9!");
-            }
-
-        } while (!regex.test(position));
-
         // array-compatible position
-        position = position - 1;
+        console.log(position);
 
         // comprobar que la posición no esté ocupada
         if (isNaN(gameBoardModule.board[position])) {
@@ -137,6 +169,9 @@ const gameFlowModule = (function (gameBoardModule) {
         } else {
 
             gameBoardModule.board[position] = activePlayer.getBoardSymbol();
+            // querySelector no soporta IDs que empiecen por un número!
+            console.log(gameBoardContainer);
+            gameBoardContainer.querySelector(".s" + position).style["border-color"] = activePlayer.getColor();
             console.log("NEW BOARD STATE\n");
             gameBoardModule.displayBoard();
 
@@ -220,12 +255,13 @@ const gameFlowModule = (function (gameBoardModule) {
 })(gameBoardModule);
 
 // depender también del gameFlow?
-const domLogicAndDisplayModule = (function (gameBoardModule) {
+const domLogicAndDisplayModule = (function (gameBoardModule, gameFlowModule) {
 
     const gameBoardContainer = document.querySelector(".gameBoardContainer");
     const squaresArray = Array.from(document.querySelectorAll(".gameBoardContainer>div"));
     const startGameBtn = document.querySelector("form button");
     const cancelButton = document.querySelector(".cancelButton");
+    const gameInfo = document.querySelector(".gameInfoContainer>h2");
 
     startGameBtn.style["display"] = "block";
     cancelButton.style["display"] = "none";
@@ -245,7 +281,8 @@ const domLogicAndDisplayModule = (function (gameBoardModule) {
 
             startGameBtn.style["display"] = "none";
             cancelButton.style["display"] = "block";
-            // game start con los nombres como parámetros
+            // game start con los nombres como parámetros, y los nodos del dom necesarios
+            gameFlowModule.startGame(player1Name, player2Name, gameBoardContainer, cancelButton, startGameBtn, gameInfo);
 
         } else {
             alert("Please, enter a name for both players!");
@@ -254,4 +291,4 @@ const domLogicAndDisplayModule = (function (gameBoardModule) {
     });
 
 
-})(gameBoardModule);
+})(gameBoardModule, gameFlowModule);
