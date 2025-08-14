@@ -115,7 +115,6 @@ const gameFlowModule = (function (gameBoardModule) {
                     case "cancelGame":
                         break;
                     case "occupiedPosition":
-                        alert(activePlayer.name + "TRY AGAIN");
                         break;
                     case "continue":
                         break;
